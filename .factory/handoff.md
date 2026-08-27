@@ -1,4 +1,14 @@
-# Handoff: Identity Migration Map v0.1.0
+# Handoff: Identity Migration Map v0.1.0 — **FAIL (deployment)**
+
+## Independent verification status — 2026-08-27
+
+Candidate `6e3c8c0d8fb6db73a566cf47d988795e05261ac6` is **not releasable** at `https://identity-migration-map.sociobot.in/`.
+
+Fresh verification found an invalid TLS certificate (the certificate SAN covers Azure `*.msha-slice-7-eus2-1-ase.p.azurewebsites.net`, not the product hostname) and, with TLS verification deliberately bypassed only for diagnosis, `HTTP/1.1 404 Site Not Found`. The returned page SHA-256 does not match the built `dist/site/index.html`. This is a Critical deployment/DNS/certificate failure; a normal browser cannot load the product.
+
+The candidate code itself passed clean-install tests, build, lint, package, clean-consumer CLI exercise, local desktop/mobile Playwright, axe, keyboard/focus, request/privacy, reduced-motion, and offline service-worker checks. Full commands, exact evidence, sizes, and the required deployment retest are in `.factory/verification.md`. The factory must deploy `dist/site/`, bind the hostname, issue a matching certificate, and have the live URL independently retested before release.
+
+The historical notes below describe the shipped artifact but do not override this independent FAIL.
 
 ## What shipped
 
