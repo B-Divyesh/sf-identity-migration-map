@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f3eedc">
+    <meta name="description" content="Inventory every dependent file, record, and integration before changing a user identifier. Read-only, local-first, and built for human review.">
+    <title>Identity Migration Map — trace every dependency before a rename</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="preload" href="/assets/migration-herbarium.webp" as="image" type="image/webp" fetchpriority="high">
+    <link rel="stylesheet" href="/styles.css">
+    <script type="module" src="/main.ts"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+    <div class="offline-banner" id="offline-banner" hidden role="status">You’re offline. The field demo still works; license checks will resume when connected.</div>
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="Identity Migration Map home">
+        <span class="brand-mark" aria-hidden="true">⌁</span>
+        <span>Identity Migration Map</span>
+      </a>
+      <nav aria-label="Primary navigation">
+        <a href="#procedure">Procedure</a>
+        <a href="#field-demo">Field demo</a>
+        <a href="#install">Install</a>
+        <a href="#field-kit">Field kit</a>
+      </nav>
+    </header>
+
+    <main id="main">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow"><span aria-hidden="true">Plate 01</span> · Read-only migration reconnaissance</p>
+          <h1 id="hero-title">Trace the roots before you rename the user.</h1>
+          <p class="lede">Map every path, exported record, config value, and external handoff that still depends on an old identifier—then give each finding an owner and a rollback step.</p>
+          <div class="hero-actions">
+            <a class="button primary" href="#field-demo">Try the local demo</a>
+            <a class="button secondary" href="#install">Install the CLI</a>
+          </div>
+          <ul class="trust-list" aria-label="Product guarantees">
+            <li><span aria-hidden="true">✓</span> Sources stay read-only</li>
+            <li><span aria-hidden="true">✓</span> No telemetry</li>
+            <li><span aria-hidden="true">✓</span> Human confirmation required</li>
+          </ul>
+        </div>
+        <figure class="hero-plate">
+          <img src="/assets/migration-herbarium.webp" width="1536" height="1024" alt="A field-guide illustration of a fern whose roots branch into file paths, database tables, and integration nodes" fetchpriority="high">
+          <figcaption><span>Specimen A.</span> One visible identity, many dependent roots.</figcaption>
+        </figure>
+      </section>
+
+      <aside class="safety-note" aria-label="Safety boundary">
+        <span class="diamond" aria-hidden="true"></span>
+        <p><strong>A match is evidence, not permission.</strong> The map never changes accounts, writes databases, or assumes authorization from a string occurrence.</p>
+      </aside>
+
+      <section id="procedure" class="section procedure" aria-labelledby="procedure-title">
+        <div class="section-heading">
+          <p class="eyebrow">Field procedure</p>
+          <h2 id="procedure-title">A migration plan you can hand to every owner</h2>
+          <p>Move from a vague grep result to an auditable, rehearsable handoff.</p>
+        </div>
+        <ol class="procedure-list">
+          <li><span class="step-number">01</span><div><h3>Declare the specimen</h3><p>Name each old → new identifier and the folders or read-only exports you intend to inspect.</p></div></li>
+          <li><span class="step-number">02</span><div><h3>Observe every root</h3><p>The CLI records each literal occurrence with source, line, column, type, and secret-redacted context.</p></div></li>
+          <li><span class="step-number">03</span><div><h3>Assign a keeper</h3><p>Unowned findings stay visibly unresolved. SaaS exports always carry a human-confirmation warning.</p></div></li>
+          <li><span class="step-number">04</span><div><h3>Rehearse the return</h3><p>Every mapping/source pair enters the rollback ledger as not tested until a person verifies it.</p></div></li>
+        </ol>
+      </section>
+
+      <section id="field-demo" class="section demo-section" aria-labelledby="demo-title">
+        <div class="section-heading">
+          <p class="eyebrow">Local field test</p>
+          <h2 id="demo-title">See the evidence shape before you install</h2>
+          <p>This simplified browser scan never uploads or stores what you paste. The CLI adds directories, export files, secret redaction, and full ledgers.</p>
+        </div>
+        <div class="demo-grid">
+          <form id="demo-form" class="specimen-form" novalidate>
+            <div class="form-row two-up">
+              <div><label for="old-id">Old identifier</label><input id="old-id" name="old-id" value="alice" autocomplete="off" required></div>
+              <div><label for="new-id">New identifier</label><input id="new-id" name="new-id" value="alice.ops" autocomplete="off" required></div>
+            </div>
+            <div class="form-row two-up">
+              <div><label for="source-name">Source label</label><input id="source-name" name="source-name" value="config/app.env" required></div>
+              <div><label for="owner">Owner <span>(optional)</span></label><input id="owner" name="owner" value="platform"></div>
+            </div>
+            <div class="form-row">
+              <label for="sample">Read-only excerpt</label>
+              <textarea id="sample" name="sample" rows="7" required spellcheck="false">HOME=/srv/alice
+DATABASE_URL=postgres://alice@db/app
+archive_owner=alice
+# confirm alice in the chat export</textarea>
+            </div>
+            <label class="checkbox-row"><input id="external" type="checkbox"><span>Mark as an external SaaS export</span></label>
+            <p class="form-error" id="demo-error" role="alert"></p>
+            <button class="button primary" type="submit">Map this excerpt</button>
+          </form>
+          <div class="results-panel" aria-live="polite" aria-atomic="false">
+            <div class="results-header"><p class="eyebrow">Evidence sheet</p><span id="result-count" class="count-seal">4 hits</span></div>
+            <div id="demo-results"></div>
+            <div class="download-row">
+              <button class="text-button" id="download-json" type="button">Export JSON</button>
+              <button class="text-button" id="download-csv" type="button">Export CSV</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="install" class="section install-section" aria-labelledby="install-title">
+        <div class="section-heading light">
+          <p class="eyebrow">The working tool</p>
+          <h2 id="install-title">From plan file to review bundle</h2>
+          <p>The single Rust binary runs offline on macOS, Linux, or Windows and opens sources only for reading.</p>
+        </div>
+        <div class="terminal" role="region" aria-label="CLI install and scan commands">
+          <div class="terminal-bar"><span>migration field log</span><button id="copy-command" type="button" aria-label="Copy install and scan commands">Copy commands</button></div>
+          <pre id="cli-command" tabindex="0"><code><span class="prompt">$</span> cargo install identity-migration-map
+<span class="prompt">$</span> imm init --output migration.toml
+<span class="prompt">$</span> imm scan --plan migration.toml --out migration-map
+
+Mapped 12 occurrence(s) across 7 file(s).
+Reports: migration-map</code></pre>
+        </div>
+        <div class="output-columns">
+          <div><h3>Evidence</h3><p>Machine-readable manifest plus a row for every exact file, line, and column.</p></div>
+          <div><h3>Ownership</h3><p>Markdown checklist grouped by the people who must confirm meaning and authority.</p></div>
+          <div><h3>Rollback</h3><p>A CSV ledger whose verification status starts honestly at <code>not-tested</code>.</p></div>
+        </div>
+        <a class="source-link" href="https://github.com/B-Divyesh/sf-identity-migration-map">Read the source and full CLI reference <span aria-hidden="true">↗</span></a>
+      </section>
+
+      <section id="field-kit" class="section pricing-section" aria-labelledby="kit-title">
+        <div class="field-kit-copy">
+          <p class="eyebrow">Optional field kit</p>
+          <h2 id="kit-title">Reusable planning templates, once</h2>
+          <p>The free CLI includes scanning, redaction, every export format, and all safety checks. The <strong>$19 one-time Field Kit</strong> adds editable stakeholder brief, cutover runbook, and rollback rehearsal templates for teams that want a polished project packet.</p>
+          <ul class="kit-list">
+            <li>Migration brief with owner sign-off table</li>
+            <li>Timed cutover and communications runbook</li>
+            <li>Rollback rehearsal and evidence checklist</li>
+          </ul>
+          <p class="merchant-note">Secure checkout is hosted by Sociobot; Dodo is merchant of record. Refunds are handled there and revoke the license automatically.</p>
+        </div>
+        <div class="license-card">
+          <span class="price"><strong>$19</strong> once</span>
+          <a class="button primary" href="https://api.sociobot.in/api/v1/products/identity-migration-map/checkout">Buy the Field Kit</a>
+          <div class="rule-label"><span>or restore</span></div>
+          <form id="license-form">
+            <label for="license-token">Have a license? Paste it here</label>
+            <div class="license-row"><input id="license-token" autocomplete="off" required aria-describedby="license-status"><button class="button secondary" type="submit">Verify</button></div>
+          </form>
+          <p id="license-status" class="license-status" role="status">The free tools are ready. No license is stored yet.</p>
+          <button class="text-button" id="download-kit" type="button" disabled>Download Field Kit</button>
+          <p class="legal-links"><a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a></p>
+        </div>
+      </section>
+
+      <section class="closing" aria-labelledby="closing-title">
+        <p class="eyebrow">Before the first change</p>
+        <h2 id="closing-title">Make the hidden dependencies discussable.</h2>
+        <a class="button primary" href="#field-demo">Map a sample locally</a>
+      </section>
+    </main>
+
+    <footer>
+      <a class="brand" href="/"><span class="brand-mark" aria-hidden="true">⌁</span><span>Identity Migration Map</span></a>
+      <p>Read-only reconnaissance for careful identity handoffs.</p>
+      <nav aria-label="Footer navigation"><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="https://github.com/B-Divyesh/sf-identity-migration-map">Source</a></nav>
+      <p>© 2026 Sociobot · MIT licensed</p>
+    </footer>
+  </body>
+</html>
