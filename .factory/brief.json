@@ -1,0 +1,11 @@
+{
+  "slug": "identity-migration-map",
+  "title": "Identity Migration Map",
+  "territory": "utilities",
+  "user": "A self-hoster or small-team administrator changing a user identifier who needs to inventory every dependent path, record, and integration before a rename.",
+  "smallest_useful_product": "A local manifest generator taking declared identifier mappings plus filesystem/config/database read-only exports and producing dependency hits, owner checklists, and a rollback ledger.",
+  "success_measure": "On a seeded repository/config fixture, it finds every declared old identifier occurrence and produces a complete owner checklist in under five minutes.",
+  "artifact_class": "cli",
+  "monetization": "one-time",
+  "constraints": "Read-only inputs; support secret redaction; never infer authorization from a string match; state clearly that external SaaS dependencies require human confirmation."
+}
