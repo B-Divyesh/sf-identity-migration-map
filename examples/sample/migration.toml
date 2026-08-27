@@ -1,0 +1,23 @@
+version = 1
+name = "Move alice to alice.ops"
+
+[[mappings]]
+from = "alice"
+to = "alice.ops"
+owner = "platform"
+rollback = "Restore the pre-cutover snapshot and reinstate the alice alias"
+
+[[sources]]
+path = "config"
+kind = "config"
+owner = "platform"
+
+[[sources]]
+path = "exports/users.csv"
+kind = "database-export"
+owner = "data"
+
+[[sources]]
+path = "exports/chat.json"
+kind = "saas-export"
+owner = "collaboration"

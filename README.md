@@ -89,11 +89,17 @@ npm run build
 
 `npm test` runs Rust unit/integration tests plus static-site tests. `npm run build` compiles the release CLI and emits the deployable site at `dist/site/index.html`. To work on the site alone, use `npm run dev` or `npm run build:site`.
 
+Run the committed sample inventory end to end:
+
+```sh
+cargo run -- scan --plan examples/sample/migration.toml --out /tmp/imm-sample --json
+```
+
 ## Scope and safety
 
 Inputs are opened read-only. Binary files, symlinks, and common build/VCS directories are skipped; external SaaS exports are marked for human confirmation. `imm` does not rename, provision, authenticate, execute SQL, or infer permission from a match. Review results with the named system owners and test every rollback step before changing production identities.
 
-No telemetry is collected. See [privacy](site/privacy.html) and [terms](site/terms.html). Licensed site tools use Sociobot's hosted one-time purchase and daily verification contract; the core scanner, safety controls, and exports are free.
+No telemetry is collected. See [privacy](site/privacy/index.html) and [terms](site/terms/index.html). Licensed site tools use Sociobot's hosted one-time purchase and daily verification contract; the core scanner, safety controls, and exports are free.
 
 ## License
 

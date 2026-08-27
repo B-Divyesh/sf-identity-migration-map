@@ -122,3 +122,26 @@ fn init_refuses_to_overwrite() {
     assert_eq!(second.code(), Some(2));
     let _ = fs::remove_dir_all(root);
 }
+
+#[test]
+fn committed_sample_finds_all_seven_declared_occurrences() {
+    let output_dir = temp_dir("committed-sample");
+    let plan = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("examples/sample/migration.toml");
+    let output = Command::new(env!("CARGO_BIN_EXE_imm"))
+        .args(["scan", "--plan"])
+        .arg(plan)
+        .args(["--out"])
+        .arg(&output_dir)
+        .arg("--json")
+        .output()
+        .unwrap();
+    assert!(
+        output.status.success(),
+        "{}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+    let summary: serde_json::Value = serde_json::from_slice(&output.stdout).unwrap();
+    assert_eq!(summary["occurrences"], 7);
+    assert_eq!(summary["external_sources"], 1);
+    let _ = fs::remove_dir_all(output_dir);
+}
