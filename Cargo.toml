@@ -1,0 +1,28 @@
+[package]
+name = "identity-migration-map"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.85"
+description = "Read-only evidence mapper for identifier migrations"
+license = "MIT"
+repository = "https://github.com/B-Divyesh/sf-identity-migration-map"
+readme = "README.md"
+keywords = ["migration", "identity", "cli", "audit"]
+categories = ["command-line-utilities"]
+
+[[bin]]
+name = "imm"
+path = "src/main.rs"
+
+[dependencies]
+clap = { version = "4.5", features = ["derive"] }
+regex = "1.11"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+toml = "0.9"
+walkdir = "2.5"
+
+[profile.release]
+strip = true
+lto = "thin"
+
