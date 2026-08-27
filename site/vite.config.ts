@@ -8,17 +8,13 @@ export default defineConfig({
     outDir: resolve(import.meta.dirname, "../dist/site"),
     emptyOutDir: true,
     target: "es2022",
+    manifest: true,
     cssCodeSplit: true,
     rollupOptions: {
       input: {
         home: resolve(import.meta.dirname, "index.html"),
         privacy: resolve(import.meta.dirname, "privacy/index.html"),
         terms: resolve(import.meta.dirname, "terms/index.html")
-      },
-      output: {
-        entryFileNames: "assets/[name].js",
-        chunkFileNames: "assets/[name].js",
-        assetFileNames: "assets/[name][extname]"
       }
     }
   }

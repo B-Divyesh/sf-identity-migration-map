@@ -2,6 +2,7 @@ node_modules/
 dist/
 target/
 output/
+.factory/evidence/
 .env
 *.log
 graphify-out/

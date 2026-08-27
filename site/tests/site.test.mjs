@@ -29,4 +29,7 @@ test("initial JS and CSS stay inside the budgets", async () => {
   const cssSize = (await stat(new URL(css.slice(1), root))).size;
   assert.ok(jsSize <= 200 * 1024, `JS is ${jsSize} bytes`);
   assert.ok(cssSize <= 50 * 1024, `CSS is ${cssSize} bytes`);
+  const code = await readFile(new URL(js.slice(1), root), "utf8");
+  assert.match(code, /sb_license:/);
+  assert.match(code, /verify\?license=/);
 });

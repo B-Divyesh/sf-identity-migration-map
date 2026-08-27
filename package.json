@@ -7,7 +7,7 @@
     "dev": "vite --config site/vite.config.ts",
     "test": "cargo test && npm run build:site && node --test site/tests/*.test.mjs",
     "build:cli": "cargo build --release",
-    "build:site": "vite build --config site/vite.config.ts",
+    "build:site": "vite build --config site/vite.config.ts && node site/build-service-worker.mjs",
     "build": "npm run build:cli && npm run build:site"
   },
   "devDependencies": {

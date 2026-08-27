@@ -163,7 +163,11 @@ function setUnlocked(unlocked: boolean, message: string): void {
 
 async function verifyLicense(token: string, force = false): Promise<void> {
   const cached = cachedVerdict(token);
-  if (cached?.valid) setUnlocked(true, "Field Kit unlocked from your last verified license.");
+  if (cached?.valid) {
+    setUnlocked(true, "Field Kit unlocked from your last verified license.");
+  } else if (cached) {
+    setUnlocked(false, "License no longer active. You can keep using every free scanning and export tool.");
+  }
   if (!force && cached && Date.now() - cached.checkedAt < 86_400_000) return;
   licenseStatus.textContent = cached?.valid ? "Field Kit unlocked. Rechecking quietly…" : "Checking this license…";
   try {
