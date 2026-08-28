@@ -1,67 +1,27 @@
-# Handoff: Identity Migration Map v0.1.0 — **FAIL (deployment)**
+# Handoff: Identity Migration Map v0.1.0 — **FAIL (live cache policy)**
 
-## Independent verification status — 2026-08-27
+## Independent verification status — 2026-08-28
 
-Candidate `6e3c8c0d8fb6db73a566cf47d988795e05261ac6` is **not releasable** at `https://identity-migration-map.sociobot.in/`.
+Candidate `6e3c8c0d8fb6db73a566cf47d988795e05261ac6` is deployed at `https://identity-migration-map.sociobot.in/`, and the live HTML, JavaScript, CSS, hero image, and service worker match the fresh build byte-for-byte. The former TLS/routing failure is resolved.
 
-Fresh verification found an invalid TLS certificate (the certificate SAN covers Azure `*.msha-slice-7-eus2-1-ase.p.azurewebsites.net`, not the product hostname) and, with TLS verification deliberately bypassed only for diagnosis, `HTTP/1.1 404 Site Not Found`. The returned page SHA-256 does not match the built `dist/site/index.html`. This is a Critical deployment/DNS/certificate failure; a normal browser cannot load the product.
+The release is nevertheless **FAIL** against the factory performance contract: every live hashed asset is served as `Cache-Control: public, must-revalidate, max-age=30`, not long-lived `immutable`. Configure the static host/CDN to cache fingerprinted `/assets/*` for a long max-age with `immutable`; retain short/revalidated caching for HTML and the service worker. This Medium deployment defect is the release blocker.
 
-The candidate code itself passed clean-install tests, build, lint, package, clean-consumer CLI exercise, local desktop/mobile Playwright, axe, keyboard/focus, request/privacy, reduced-motion, and offline service-worker checks. Full commands, exact evidence, sizes, and the required deployment retest are in `.factory/verification.md`. The factory must deploy `dist/site/`, bind the hostname, issue a matching certificate, and have the live URL independently retested before release.
+Full independent evidence, tests, package-consumer exercise, browser/privacy/PWA checks, headers, exact hashes, and retest command are in `.factory/verification-2.md`.
 
-The historical notes below describe the shipped artifact but do not override this independent FAIL.
-
-## What shipped
-
-- A typed Rust CLI, `imm`, with helpful `init`, `scan`, and `--help` paths; documented exit codes; compact `--json` output; and no interactive or network behavior.
-- Strict TOML plans for identifier mappings and filesystem, config, database-export, and SaaS-export sources. Source paths are resolved relative to the plan.
-- Read-only recursive scanning of UTF-8 text, exact occurrence locations, default secret/bearer-token redaction, ignored build/VCS directories, and explicit warnings for skipped binary/large files.
-- A complete output bundle: `manifest.json`, `report.md`, `hits.csv`, and `rollback-ledger.csv`. The manifest includes every occurrence plus one owner-checklist and rollback row for every mapping/source pair, including zero-hit sources.
-- Automatic human-confirmation warnings for `saas-export` sources, even if `external = true` was omitted. No match is presented as authority to mutate a system.
-- A committed seven-occurrence sample under `examples/sample/`, covered by an end-to-end integration test.
-- A responsive botanical field-guide landing/docs site with an in-browser local-only scanner, empty/error states, keyboard operation, JSON/CSV demo exports, install documentation, and source links.
-- A $19 one-time optional Field Kit using the Sociobot billing contract: hosted buy link, return-token capture and URL cleanup, `sb_license:identity-migration-map` local storage, cached daily verification, optimistic cached unlock, offline behavior, and paste-to-restore. Core scanning, safety, accessibility, and export remain free.
-- `/privacy/` and `/terms/` pages, no analytics, no CDN assets, and an offline service worker whose precache is generated from Vite's hashed manifest.
-- Original generated hero artwork at `site/public/assets/migration-herbarium.webp` (192,734 bytes). The exact prompt, generation route, visual tokens, and provenance are recorded in `.factory/design.md`.
-- MIT license, changelog, README, and a clean-clone CI workflow.
-
-## Run and verify
+## How to run and verify
 
 ```sh
 npm ci
 npm test
+cargo fmt --check
+cargo clippy --all-targets -- -D warnings
 npm run build
 cargo package
+./target/release/imm scan --plan examples/sample/migration.toml --out /tmp/imm-sample --json
 ```
 
-The required static deployment root is `dist/site/`, with `dist/site/index.html` at its root. The release binary is `target/release/imm`. The ready-to-publish Rust package is produced with `cargo package`; publishing credentials remain with the factory.
+The expected sample summary is 1 mapping, 3 sources, 3 files, 7 occurrences, 0 unowned occurrences, and 1 external source. Deploy `dist/site/`; the release binary is `target/release/imm` and `cargo package` produces the ready-to-publish crate (the factory owns publishing credentials).
 
-Seeded end-to-end check:
+## Known product boundary
 
-```sh
-./target/release/imm scan \
-  --plan examples/sample/migration.toml \
-  --out /tmp/imm-sample \
-  --json
-```
-
-Expected summary: 1 mapping, 3 sources, 3 files, 7 occurrences, 0 unowned occurrences, and 1 external source.
-
-## Verification completed on 2026-08-27
-
-- `cargo fmt --check`: passed.
-- `cargo clippy --all-targets -- -D warnings`: passed.
-- `npm test`: passed (2 unit tests, 4 CLI integration tests, 1 Rust doctest, 3 site tests).
-- `npm run build`: passed; emitted the release CLI and `dist/site/`.
-- `cargo package --allow-dirty`: packaged and verified successfully. A clean final tree can use `cargo package` without the flag.
-- Factory `verify-url.sh` against the production build: passed; title/lang/main/alt present, one h1, no unlabeled buttons, no console errors.
-- Playwright axe WCAG A/AA audit at 390×844: 0 violations, 28 passes.
-- Offline Playwright smoke test at 390×844: cached page, styles, JavaScript, and offline banner all loaded; 0 console errors.
-- Lighthouse mobile: Performance 99, Accessibility 100, LCP 2.0s, FCP 0.9s, Speed Index 0.9s, Total Blocking Time 0ms, CLS 0.
-- Initial assets: JavaScript 6,440 bytes, CSS 11,514 bytes, hero WebP 192,734 bytes. No webfonts are shipped.
-
-## Known gaps and next steps
-
-- Scanning is deliberately literal and limited to UTF-8 files up to 10 MiB. Binary formats and live databases must be exported to readable text first; semantic meaning remains a human decision.
-- The CLI does not mutate accounts, SSO, databases, or SaaS products. That is the intended safety boundary, not an incomplete automation path.
-- The factory must register and publish the package/product, exercise a real test checkout, and switch environment routing as part of release. No product ID, registry credential, DNS, or billing secret is embedded here.
-- Release binaries are not cross-compiled in this container; CI/release automation can add signed platform archives after registry setup.
+The CLI intentionally reads declared UTF-8 exports only, redacts likely secrets by default, emits evidence/checklists/rollback ledgers, and never changes accounts, SSO, databases, or SaaS systems. Binary/large files must be exported or handled separately; all match evidence remains subject to named-owner and external-SaaS human confirmation.
