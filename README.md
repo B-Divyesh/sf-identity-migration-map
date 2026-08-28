@@ -87,7 +87,9 @@ npm test
 npm run build
 ```
 
-`npm test` runs Rust unit/integration tests plus static-site tests. `npm run build` compiles the release CLI and emits the deployable site at `dist/site/index.html`. To work on the site alone, use `npm run dev` or `npm run build:site`.
+`npm test` runs Rust unit/integration tests, strict TypeScript checking, and static-site tests. `npm run build` compiles the release CLI and emits the deployable site at `dist/site/index.html`. To work on the site alone, use `npm run dev` or `npm run build:site`.
+
+The deployable site includes an Azure Static Web Apps response policy: hashed `/assets/*` files are cached for one year with `immutable`; HTML and `service-worker.js` are revalidated so updates remain discoverable. Keep `staticwebapp.config.json` at the deployment root when deploying `dist/site/`.
 
 Run the committed sample inventory end to end:
 

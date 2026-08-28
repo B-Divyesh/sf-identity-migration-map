@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite --config site/vite.config.ts",
-    "test": "cargo test && npm run build:site && node --test site/tests/*.test.mjs",
+    "test": "cargo test && npm run typecheck && npm run build:site && node --test site/tests/*.test.mjs",
+    "typecheck": "tsc --noEmit --target es2022 --module esnext --moduleResolution bundler --lib ES2022,DOM --strict site/main.ts",
     "build:cli": "cargo build --release",
     "build:site": "vite build --config site/vite.config.ts && node site/build-service-worker.mjs",
     "build": "npm run build:cli && npm run build:site"

@@ -15,9 +15,22 @@ test("landing page has required semantics and paid-unlock contract", async () =>
 });
 
 test("legal routes and offline shell are emitted", async () => {
-  for (const file of ["privacy/index.html", "terms/index.html", "service-worker.js"]) {
+  for (const file of ["privacy/index.html", "terms/index.html", "service-worker.js", "staticwebapp.config.json"]) {
     assert.ok((await stat(new URL(file, root))).size > 100, `${file} should exist`);
   }
+});
+
+test("deployment response policy keeps versioned assets immutable and the shell fresh", async () => {
+  const config = JSON.parse(await readFile(new URL("staticwebapp.config.json", root), "utf8"));
+  assert.equal(config.globalHeaders["Cache-Control"], "public, max-age=0, must-revalidate");
+  assert.equal(config.globalHeaders["Content-Security-Policy"].includes("frame-ancestors 'none'"), true);
+  assert.equal(config.globalHeaders["X-Frame-Options"], "DENY");
+  assert.equal(config.globalHeaders["X-Content-Type-Options"], "nosniff");
+  assert.equal(config.globalHeaders["Referrer-Policy"], "strict-origin-when-cross-origin");
+
+  const assets = config.routes.find((route) => route.route === "/assets/*");
+  assert.ok(assets, "hashed Vite assets need an explicit cache rule");
+  assert.equal(assets.headers["Cache-Control"], "public, max-age=31536000, immutable");
 });
 
 test("initial JS and CSS stay inside the budgets", async () => {
