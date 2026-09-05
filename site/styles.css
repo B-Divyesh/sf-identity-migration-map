@@ -54,7 +54,7 @@ h3 { margin-bottom: 8px; font-size: 1.3rem; }
 .button.primary:hover { background: #0d2a1e; }
 .button.secondary { color: var(--ink); background: transparent; }
 .button.secondary:hover { background: var(--paper-deep); }
-.button.unavailable { width: 100%; color: #38443e; border-color: #6d776f; background: #ddd9ca; cursor: not-allowed; }
+.license-card > .button { width: 100%; }
 .trust-list { margin: 0; padding: 0; display: grid; gap: 5px; list-style: none; color: var(--muted); font-size: 0.9rem; font-weight: 700; }
 .trust-list span { color: var(--fern); }
 .hero-plate { position: relative; margin: 0; padding: 14px 14px 0; background: var(--white); border: 1px solid var(--rule); border-radius: 2px 26px 2px 2px; box-shadow: 14px 14px 0 var(--paper-deep); transform: rotate(1deg); }

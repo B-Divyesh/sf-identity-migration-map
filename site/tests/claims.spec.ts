@@ -310,7 +310,7 @@ test("@claim:licensed-field-kit keeps the free export open and restores the paid
     await expect(page.getByRole("button", { name: "Download Field Kit" })).toBeEnabled();
     expect(checks).toBe(1);
     await expect(page.getByText("$19", { exact: true })).toBeVisible();
-    await expect(page.getByText("Checkout registration pending")).toBeVisible();
+    await expect(page.getByRole("link", { name: "Buy Field Kit for $19" })).toHaveAttribute("href", "https://api.sociobot.in/api/v1/products/identity-migration-map/checkout");
     const kitDownload = page.waitForEvent("download");
     await page.getByRole("button", { name: "Download Field Kit" }).click();
     const kitPath = await (await kitDownload).path();
@@ -329,6 +329,20 @@ test("@claim:licensed-field-kit keeps the free export open and restores the paid
     await expect(page.getByRole("button", { name: "Download Field Kit" })).toBeDisabled();
     await expect(page.locator("#license-status")).toContainText("not active");
     expect(checks).toBe(2);
+  } finally {
+    await context.close();
+  }
+});
+
+test("@claim:checkout-available reaches the live $19 hosted checkout", async ({ browser }) => {
+  const context = await browser.newContext();
+  try {
+    const page = await context.newPage();
+    const response = await page.goto("https://api.sociobot.in/api/v1/products/identity-migration-map/checkout", { waitUntil: "domcontentloaded" });
+    expect(response?.status()).toBe(200);
+    expect(new URL(page.url()).origin).toBe("https://checkout.dodopayments.com");
+    await expect(page.locator("body")).toContainText("Identity Migration Map Field Kit");
+    await expect(page.locator("body")).toContainText("$19.00");
   } finally {
     await context.close();
   }

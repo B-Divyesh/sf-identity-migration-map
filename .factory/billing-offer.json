@@ -5,7 +5,7 @@
   "currency": "USD",
   "price_type": "one_time_price",
   "return_url": "https://identity-migration-map.sociobot.in/",
-  "price_evidence": "The existing live offer and review-1 record a $19 one-time Field Kit.",
+  "price_evidence": "The live Sociobot-hosted checkout displayed Identity Migration Map Field Kit at $19.00 on 2026-09-05.",
   "paid_features": [
     "Editable migration brief with owner sign-off table",
     "Timed cutover and communications runbook",

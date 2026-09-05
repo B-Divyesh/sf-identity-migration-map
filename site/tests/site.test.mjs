@@ -55,8 +55,9 @@ test("initial JavaScript, CSS, image, and font assets stay inside budgets", asyn
   assert.equal((html.match(/\.woff2/g) || []).length, 0);
 });
 
-test("the unavailable checkout is explained and never links visitors to the known 404", async () => {
+test("the paid offer links only to the approved Sociobot checkout", async () => {
   const html = await readFile(new URL("index.html", root), "utf8");
-  assert.match(html, /Checkout registration pending/);
-  assert.doesNotMatch(html, /products\/identity-migration-map\/checkout/);
+  const checkouts = html.match(/https:\/\/api\.sociobot\.in\/api\/v1\/products\/identity-migration-map\/checkout/g) || [];
+  assert.equal(checkouts.length, 1);
+  assert.doesNotMatch(html, /dodopayments\.com|pilot-api\.sociobot\.in/);
 });

@@ -89,5 +89,12 @@
     "where": "pricing, privacy, terms, README",
     "test": "npm run test:claims -- --grep '@claim:licensed-field-kit'",
     "sandbox": "fresh context; recorded valid verification response; URL cleanup, storage, reload, and downloaded template checks"
+  },
+  {
+    "id": "checkout-available",
+    "claim": "The $19 buy link reaches the live Sociobot-hosted checkout for the Identity Migration Map Field Kit.",
+    "where": "pricing, terms, README",
+    "test": "npm run test:claims -- --grep '@claim:checkout-available'",
+    "sandbox": "fresh browser context; approved product endpoint; assert hosted checkout origin, product name, and displayed price"
   }
 ]

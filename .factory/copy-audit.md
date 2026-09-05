@@ -57,9 +57,9 @@ No sentence exceeds 22 words. No banned marketing term appears.
 | Rollback rehearsal and evidence checklist | 5 |
 | Sociobot hosts checkout, and Dodo is the merchant of record. | 10 |
 | $19 one-time purchase | 3 |
-| Checkout registration pending | 3 |
-| Purchases are unavailable while the billing offer is registered. | 9 |
-| Existing licenses still work. | 4 |
+| Buy Field Kit for $19 | 5 |
+| Checkout opens Sociobot’s hosted payment page. | 6 |
+| Existing licenses also work. | 4 |
 | Restore a purchase | 3 |
 | Paste your license token | 4 |
 | Verify license | 2 |

@@ -116,8 +116,8 @@ See the [privacy policy](https://identity-migration-map.sociobot.in/privacy/) an
 
 The $19 one-time Field Kit contains three editable team planning templates.
 Scanning, redaction, report exports, and safety checks remain free.
-Checkout is unavailable until the Sociobot billing offer is registered.
-Existing buyers can restore a valid license on the site.
+The buy link opens Sociobot’s hosted checkout.
+Buyers can restore a valid license on the site.
 
 ## Develop, test, and build
 
