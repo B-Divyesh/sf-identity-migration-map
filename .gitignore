@@ -6,4 +6,6 @@ output/
 .env
 *.log
 graphify-out/
+test-results/
+playwright-report/
 .DS_Store

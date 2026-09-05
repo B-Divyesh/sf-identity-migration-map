@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://identity-migration-map.sociobot.in/sitemap.xml

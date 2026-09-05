@@ -5,8 +5,12 @@ const output = new URL("../dist/site/", import.meta.url);
 const manifest = JSON.parse(await readFile(new URL(".vite/manifest.json", output), "utf8"));
 const builtAssets = [...new Set(Object.values(manifest).flatMap((entry) => [entry.file, ...(entry.css || [])]))]
   .map((file) => `/${file}`);
-const shell = ["/", "/privacy/", "/terms/", ...builtAssets, "/assets/migration-herbarium.webp", "/favicon.svg"];
-const version = createHash("sha256").update(shell.join("\n")).digest("hex").slice(0, 10);
+const shell = ["/", "/demo/", "/privacy/", "/terms/", "/404.html", ...builtAssets, "/assets/migration-herbarium.webp", "/assets/social-card.png", "/favicon.svg", "/apple-touch-icon.png"];
+const shellContent = await Promise.all(shell.map(async (path) => {
+  const file = path === "/" ? "index.html" : path.replace(/^\//, "").replace(/\/$/, "/index.html");
+  return readFile(new URL(file, output));
+}));
+const version = createHash("sha256").update(Buffer.concat(shellContent)).digest("hex").slice(0, 10);
 
 const serviceWorker = `const CACHE = "imm-shell-${version}";
 const SHELL = ${JSON.stringify(shell)};

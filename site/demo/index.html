@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#173c2d">
+    <meta name="description" content="Try Identity Migration Map with four realistic sample dependencies. The sample stays in memory and never touches your files.">
+    <title>Demo — Identity Migration Map</title>
+    <link rel="canonical" href="https://identity-migration-map.sociobot.in/demo/">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Demo — Identity Migration Map">
+    <meta property="og:description" content="Inspect a realistic identifier migration sample without touching your files.">
+    <meta property="og:url" content="https://identity-migration-map.sociobot.in/demo/">
+    <meta property="og:image" content="https://identity-migration-map.sociobot.in/assets/social-card.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Demo — Identity Migration Map">
+    <meta name="twitter:description" content="Inspect a realistic identifier migration sample without touching your files.">
+    <meta name="twitter:image" content="https://identity-migration-map.sociobot.in/assets/social-card.png">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="stylesheet" href="/styles.css">
+    <script type="module" src="/main.ts"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+    <div class="demo-mode-banner" aria-label="Demo mode">
+      <p>Demo — sample data, nothing is saved</p>
+      <button id="reset-demo" type="button">Reset demo</button>
+      <a href="/#install">Start for real</a>
+    </div>
+    <div class="offline-banner" id="offline-banner" hidden role="status">You are offline. This saved sample still works.</div>
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="Identity Migration Map home"><span class="brand-mark" aria-hidden="true">⌁</span><span>Identity Migration Map</span></a>
+      <nav aria-label="Primary navigation"><a href="/demo/" aria-current="page">Demo</a><a href="/#install">Install</a><a href="/privacy/">Privacy</a></nav>
+    </header>
+
+    <main id="main">
+      <section class="demo-intro" aria-labelledby="demo-title">
+        <p class="eyebrow">Browser sample</p>
+        <h1 id="demo-title">Inspect a sample identifier rename</h1>
+        <p class="lede">Change the sample below to see exact matches, owners, and required human checks.</p>
+      </section>
+      <section class="section demo-workspace" aria-label="Sample migration workspace">
+        <div class="demo-grid">
+          <form id="demo-form" class="sample-form" novalidate>
+            <h2>Set the sample input</h2>
+            <div class="form-row two-up">
+              <div><label for="old-id">Old identifier</label><input id="old-id" name="old-id" autocomplete="off" required></div>
+              <div><label for="new-id">New identifier</label><input id="new-id" name="new-id" autocomplete="off" required></div>
+            </div>
+            <div class="form-row two-up">
+              <div><label for="source-name">Source label</label><input id="source-name" name="source-name" required></div>
+              <div><label for="owner">Owner <span>(optional)</span></label><input id="owner" name="owner"></div>
+            </div>
+            <div class="form-row">
+              <label for="sample">Read-only excerpt</label>
+              <textarea id="sample" name="sample" rows="7" required spellcheck="false"></textarea>
+            </div>
+            <label class="checkbox-row"><input id="external" type="checkbox"><span>Mark this as an external SaaS export</span></label>
+            <p class="form-error" id="demo-error" role="alert"></p>
+            <button class="button primary" type="submit">Map this excerpt</button>
+            <p class="demo-status" id="demo-status" role="status"></p>
+          </form>
+          <div class="results-panel" aria-live="polite" aria-atomic="false">
+            <div class="results-header"><h2>Sample evidence</h2><span id="result-count" class="count-seal">0 hits</span></div>
+            <div id="demo-results"></div>
+            <div class="download-row">
+              <button class="text-button" id="download-json" type="button">Export JSON</button>
+              <button class="text-button" id="download-csv" type="button">Export CSV</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <a class="brand" href="/" aria-label="Identity Migration Map home"><span class="brand-mark" aria-hidden="true">⌁</span><span>Identity Migration Map</span></a>
+      <p>Find identifier dependencies before a user rename.</p>
+      <nav aria-label="Footer navigation"><a href="/demo/" aria-current="page">Demo</a><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a></nav>
+      <p><a href="https://sociobot.in">Built by Param Factory</a> · v0.2.0</p>
+    </footer>
+  </body>
+</html>
