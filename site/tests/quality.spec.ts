@@ -38,6 +38,18 @@ test("phone first screen states the job, audience, first action, and three facts
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(390);
 });
 
+test("desktop first screen keeps the action, three facts, and landscape artwork in view", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto("/");
+  await expect(page.getByRole("link", { name: "Try it with sample data" })).toBeInViewport();
+  const layout = await page.evaluate(() => ({
+    factsBottom: document.querySelector(".trust-list")!.getBoundingClientRect().bottom,
+    artworkHeight: Number.parseFloat(getComputedStyle(document.querySelector(".hero-plate img")!).height)
+  }));
+  expect(layout.factsBottom).toBeLessThanOrEqual(1000);
+  expect(layout.artworkHeight).toBeLessThanOrEqual(500);
+});
+
 test("keyboard focus, sample validation, empty state, and recovery work", async ({ page }) => {
   await page.goto("/demo/");
   await page.keyboard.press("Tab");
