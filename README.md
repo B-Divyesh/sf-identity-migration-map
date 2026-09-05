@@ -1,10 +1,40 @@
 # Identity Migration Map
 
-Identity Migration Map (`imm`) is an offline-first, read-only CLI for administrators planning an identifier rename. It scans declared filesystem, configuration, and database-export sources for the old identifiers, then produces an evidence manifest, owner checklist, and rollback ledger. A string match is evidence to review—not authorization to change an account or record.
+Identity Migration Map is a read-only CLI for planning a user identifier rename.
 
-The companion static site at <https://identity-migration-map.sociobot.in> documents the workflow and includes a local in-browser demo. Neither the CLI nor the demo sends migration content anywhere.
+It is for self-hosters and small-team administrators.
+It finds literal dependencies and assigns owner checks and rollback steps.
+A string match is evidence for human review, never permission to change a system.
 
-## Usage
+The companion site is <https://identity-migration-map.sociobot.in>.
+Its [sample demo](https://identity-migration-map.sociobot.in/demo/) works without an account.
+
+## Install
+
+Install Rust 1.85 or newer.
+Then install the CLI from the public source repository:
+
+```sh
+cargo install --git https://github.com/B-Divyesh/sf-identity-migration-map --locked
+imm --help
+```
+
+The factory publishes release packages.
+This repository is ready for `cargo package`, but workers do not publish registry releases.
+
+## Try the bundled sample
+
+Run the real scanner without supplying any files:
+
+```sh
+imm demo
+```
+
+The command creates sample inputs in a new temporary directory.
+It finds seven occurrences in three files and creates four reports.
+The terminal prints the report directory and leaves it available for review.
+
+## Scan your own exports
 
 Create a starter plan:
 
@@ -12,7 +42,7 @@ Create a starter plan:
 imm init --output migration.toml
 ```
 
-Edit it to name every mapping and source you expect to inspect:
+Edit the plan to name each mapping, source, owner, and rollback step:
 
 ```toml
 version = 1
@@ -41,67 +71,78 @@ owner = "collaboration"
 external = true
 ```
 
-Scan without modifying any source file:
+Run the scan:
 
 ```sh
 imm scan --plan migration.toml --out migration-map
 ```
 
-The output directory contains:
+The scan leaves declared inputs unchanged.
+It creates files only inside the chosen output directory.
 
-- `manifest.json`: machine-readable plan, evidence, warnings, and summary.
-- `report.md`: human review sheet grouped by mapping and owner.
-- `hits.csv`: one row per literal occurrence with file, line, column, and redacted context.
-- `rollback-ledger.csv`: explicit rollback step and verification status for every mapping/source pair.
+- `manifest.json` contains the plan, evidence, warnings, and summary.
+- `report.md` contains an owner checklist and rollback table.
+- `hits.csv` contains each file, line, column, source type, and redacted context.
+- `rollback-ledger.csv` contains one untested rollback entry per mapping and source pair.
 
-Use `--json` for a compact summary on stdout and `--fail-on-unowned` to exit `3` if any evidence has no declared owner:
+Use JSON output and fail completed scans that still have unowned evidence:
 
 ```sh
 imm scan --plan migration.toml --out migration-map --json --fail-on-unowned
 ```
 
-Context redaction is on by default. It masks values near secret-like keys and bearer tokens while leaving the declared identifier visible. Use `--no-redact` only when the generated artifact will receive the same protection as its source.
+Exit code `0` means the scan completed.
+Exit code `2` means the plan, input, or output was invalid.
+Exit code `3` means the scan completed but found unowned evidence when requested.
+An empty scan returns `0` and explains what still needs confirmation.
 
-Exit codes: `0` scan complete, `2` invalid plan/input/I/O error, `3` scan complete but unowned evidence exists. Empty scans are valid and produce a checklist explaining what was inspected.
+## Safety and privacy
 
-## Install
+Context redaction is on by default.
+It masks likely secrets while keeping the declared identifier visible.
+Use `--no-redact` only when the reports receive the same protection as the source.
 
-Requires Rust 1.85 or newer:
+The CLI does not rename, provision, authenticate, or write to databases.
+External exports always require confirmation from a human owner.
 
-```sh
-cargo install --path .
-imm --help
-```
+The browser demo keeps sample text in memory and creates no demo storage keys.
+Its JSON and CSV exports need no license.
+The populated demo reloads offline after its first visit.
+The site loads no analytics, advertising trackers, or third-party fonts.
 
-For release preparation (the factory publishes binaries):
+See the [privacy policy](https://identity-migration-map.sociobot.in/privacy/) and [terms](https://identity-migration-map.sociobot.in/terms/).
 
-```sh
-cargo package
-```
+## Optional Field Kit
+
+The $19 one-time Field Kit contains three editable team planning templates.
+Scanning, redaction, report exports, and safety checks remain free.
+Checkout is unavailable until the Sociobot billing offer is registered.
+Existing buyers can restore a valid license on the site.
 
 ## Develop, test, and build
 
+Run the clean setup and every quality gate:
+
 ```sh
-npm install
+npm ci
 npm test
 npm run build
+cargo fmt --check
+cargo clippy --all-targets -- -D warnings
+cargo package
 ```
 
-`npm test` runs Rust unit/integration tests, strict TypeScript checking, and static-site tests. `npm run build` compiles the release CLI and emits the deployable site at `dist/site/index.html`. To work on the site alone, use `npm run dev` or `npm run build:site`.
+`npm test` runs Rust tests, strict TypeScript, the site build, static checks, browser claims, and accessibility checks.
+`npm run build` creates `target/release/imm` and the deployable site in `dist/site/`.
 
-The deployable site includes an Azure Static Web Apps response policy: hashed `/assets/*` files are cached for one year with `immutable`; HTML and `service-worker.js` are revalidated so updates remain discoverable. Keep `staticwebapp.config.json` at the deployment root when deploying `dist/site/`.
+Every public claim is listed in [`.factory/claims.json`](.factory/claims.json).
+From the clean build above, run each listed `test` command exactly as written.
 
-Run the committed sample inventory end to end:
+## Deployment
 
-```sh
-cargo run -- scan --plan examples/sample/migration.toml --out /tmp/imm-sample --json
-```
-
-## Scope and safety
-
-Inputs are opened read-only. Binary files, symlinks, and common build/VCS directories are skipped; external SaaS exports are marked for human confirmation. `imm` does not rename, provision, authenticate, execute SQL, or infer permission from a match. Review results with the named system owners and test every rollback step before changing production identities.
-
-No telemetry is collected. See [privacy](site/privacy/index.html) and [terms](site/terms/index.html). Licensed site tools use Sociobot's hosted one-time purchase and daily verification contract; the core scanner, safety controls, and exports are free.
+The site is a Vite static build.
+Deploy `dist/site/` without changing its `staticwebapp.config.json` response policy.
+The factory owns DNS, billing registration, and release publication.
 
 ## License
 

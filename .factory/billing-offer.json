@@ -1,0 +1,15 @@
+{
+  "slug": "identity-migration-map",
+  "name": "Identity Migration Map Field Kit",
+  "price_minor": 1900,
+  "currency": "USD",
+  "price_type": "one_time_price",
+  "return_url": "https://identity-migration-map.sociobot.in/",
+  "price_evidence": "The existing live offer and review-1 record a $19 one-time Field Kit.",
+  "paid_features": [
+    "Editable migration brief with owner sign-off table",
+    "Timed cutover and communications runbook",
+    "Rollback rehearsal and evidence checklist"
+  ],
+  "license_validation_path": "/api/v1/products/identity-migration-map/verify"
+}

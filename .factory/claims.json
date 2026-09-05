@@ -1,0 +1,93 @@
+[
+  {
+    "id": "public-install",
+    "claim": "The CLI installs from the public Git repository and exposes the documented commands.",
+    "where": "landing install section, README",
+    "test": "IMM_PUBLIC_INSTALL=1 npm run test:claims -- --grep '@claim:public-install'",
+    "sandbox": "fresh Cargo install root; public repository; installed imm --help"
+  },
+  {
+    "id": "cli-demo-sandbox",
+    "claim": "imm demo scans bundled sample data without an account and creates seven hits in a new temporary directory.",
+    "where": "landing preview, README, demo guide",
+    "test": "npm run test:claims -- --grep '@claim:cli-demo-sandbox'",
+    "sandbox": "release binary; bundled sample; fresh temporary output"
+  },
+  {
+    "id": "read-only-scan",
+    "claim": "A scan leaves declared inputs unchanged and creates files only in the selected output directory.",
+    "where": "landing facts, privacy, README",
+    "test": "npm run test:claims -- --grep '@claim:read-only-scan'",
+    "sandbox": "read-only source fixture; before-and-after bytes and mode; fresh output directory"
+  },
+  {
+    "id": "evidence-safety",
+    "claim": "Evidence includes file, line, column, source type, default secret redaction, unresolved ownership, and required human confirmation.",
+    "where": "how it works, limits, README",
+    "test": "npm run test:claims -- --grep '@claim:evidence-safety'",
+    "sandbox": "external unowned fixture containing an identifier beside a secret"
+  },
+  {
+    "id": "complete-ledgers",
+    "claim": "Every mapping and source pair gets an open owner task and a rollback entry marked not-tested.",
+    "where": "landing preview, README",
+    "test": "npm run test:claims -- --grep '@claim:complete-ledgers'",
+    "sandbox": "two mappings by two sources; assert complete four-row matrices"
+  },
+  {
+    "id": "report-formats",
+    "claim": "Each scan creates manifest.json, report.md, hits.csv, and rollback-ledger.csv with the complete evidence.",
+    "where": "landing preview, README",
+    "test": "npm run test:claims -- --grep '@claim:report-formats'",
+    "sandbox": "bundled seven-hit demo; parse and count every emitted format"
+  },
+  {
+    "id": "cli-status",
+    "claim": "The CLI returns 0 for completed and empty scans, 2 for invalid input, and 3 for completed scans with unowned evidence when requested.",
+    "where": "README",
+    "test": "npm run test:claims -- --grep '@claim:cli-status'",
+    "sandbox": "normal, missing-plan, unowned, and zero-hit fixtures"
+  },
+  {
+    "id": "browser-demo",
+    "claim": "The one-click browser demo loads four owned sample hits, stays labeled, resets, and does not change existing saved data.",
+    "where": "landing first action, demo route, demo guide",
+    "test": "npm run test:claims -- --grep '@claim:browser-demo'",
+    "sandbox": "fresh browser with sentinel real-data key; sample edit, reset, and scroll"
+  },
+  {
+    "id": "browser-exports",
+    "claim": "The browser demo exports JSON and CSV containing every displayed evidence row.",
+    "where": "demo route, README",
+    "test": "npm run test:claims -- --grep '@claim:browser-exports'",
+    "sandbox": "four-hit sample; parse downloaded JSON and CSV"
+  },
+  {
+    "id": "browser-local-privacy",
+    "claim": "Browser demo text stays in memory, is not sent away, and creates no demo storage keys.",
+    "where": "demo route, privacy, README",
+    "test": "npm run test:claims -- --grep '@claim:browser-local-privacy'",
+    "sandbox": "fresh context; private marker; full request log and localStorage inspection"
+  },
+  {
+    "id": "offline-demo",
+    "claim": "The populated browser sample reloads offline after the first visit.",
+    "where": "README, demo guide",
+    "test": "npm run test:claims -- --grep '@claim:offline-demo'",
+    "sandbox": "dedicated fresh context; wait for service worker; set context offline; reload"
+  },
+  {
+    "id": "no-tracking",
+    "claim": "The site loads without analytics, advertising trackers, or third-party font requests.",
+    "where": "privacy, README",
+    "test": "npm run test:claims -- --grep '@claim:no-tracking'",
+    "sandbox": "fresh context; request log across landing and demo"
+  },
+  {
+    "id": "licensed-field-kit",
+    "claim": "Free sample exports need no license; a valid restored license downloads the $19 Field Kit, caches daily, and an invalid verdict locks it.",
+    "where": "pricing, privacy, terms, README",
+    "test": "npm run test:claims -- --grep '@claim:licensed-field-kit'",
+    "sandbox": "fresh context; recorded valid verification response; URL cleanup, storage, reload, and downloaded template checks"
+  }
+]
