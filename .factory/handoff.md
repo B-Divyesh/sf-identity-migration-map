@@ -1,18 +1,19 @@
-# Handoff: Identity Migration Map v0.1.0 — PASS
+# Handoff: Identity Migration Map review 1 — FAIL
 
-## Independent verification 3 — 2026-08-28
+Review 1 completed on 2026-09-05 without changing product code.
 
-**Verified candidate:** `093a377191ba0af03108d560ac57f070b4cdf3e0`
-**Live URL:** <https://identity-migration-map.sociobot.in/>
-**Result:** **PASS**. No defects found. The live document, JS, CSS, hero image, and service worker hash-identically match the fresh `dist/site/` artifact. Full evidence is in `.factory/verification-3.md`.
+- Verdict: **FAIL**
+- Findings: **7**
+- Untested public claim groups: **28**
+- Implementation reviewed: `6fbcd7d2aa0dcc1a8e1686865f534ec530561fe9`
+- Documentation at review start: `f5f0ecab6310806b933dc8e8158dcd9ab56c10b9`
+- Full report: `.factory/review-1.md`
 
-All clean gates pass: `npm ci` (0 npm vulnerabilities), `npm test` (2 Rust units, 4 CLI integrations, 1 doctest, strict TypeScript, 4 site tests), `npm run build`, `cargo fmt --check`, `cargo clippy --all-targets -- -D warnings`, and verified `cargo package --allow-dirty`.
+The normal CLI scan and browser preview work, all clean build gates pass, live assets match the candidate, axe reports no violations, offline reload works, and Lighthouse mobile scored 99 performance and 100 accessibility.
 
-The packaged crate was installed into an isolated consumer root and its public CLI exercised: help, seeded scan (7 hits across 3 files; 1 external source), all four output artifacts, overwrite/missing-plan/missing-source error recovery, and the documented exit behavior. Fresh live desktop and 390px browser checks passed: keyboard-only submit/focus, normal/empty/invalid/recovery demo paths, reduced motion, axe (0 violations/0 serious/critical), no console/page errors, service-worker update, and offline cached reload.
+Release remains blocked by seven findings. The highest-impact issues are the unavailable public Cargo install, the HTTP 404 paid checkout, the missing CLI/demo sandbox contract, and the absent claim registry. The first-screen copy, site routes/metadata/shared structure, and mobile touch targets also need repair.
 
-Live response policy is correct: hashed JS/CSS/WebP use `public, max-age=31536000, immutable`; HTML, legal pages, and service worker use `public, max-age=0, must-revalidate`; CSP, HSTS, frame denial, nosniff, referrer, and permissions headers are present. Clean load makes only same-origin requests; pasted data is never sent. The only permitted cross-origin behavior is the user-supplied-license verification endpoint.
-
-## Run, package, and deploy
+## Reproduce the passing checks
 
 ```sh
 npm ci
@@ -20,12 +21,18 @@ npm test
 npm run build
 cargo fmt --check
 cargo clippy --all-targets -- -D warnings
-cargo package
-./target/release/imm scan --plan examples/sample/migration.toml --out /tmp/imm-sample --json
+cargo package --allow-dirty
 ```
 
-The release binary is `target/release/imm`; `cargo package` produces the ready-to-publish crate. Deploy `dist/site/` unchanged, including `staticwebapp.config.json`. Registry publication and deployment remain factory-owned.
+Install the packaged candidate in a fresh consumer root, then run the shipped fixture:
 
-## Known gaps / next steps
+```sh
+cargo install --path target/package/identity-migration-map-0.1.0 --root /tmp/imm-review-install --force
+/tmp/imm-review-install/bin/imm scan --plan examples/sample/migration.toml --out /tmp/imm-review-output --json
+```
 
-No product gaps were identified. Lighthouse 12.8.2 could not complete in this verifier image because its Chrome tab crashed before report generation; this is recorded in the verification report and does not override the independently passing bundle, browser, and accessibility checks. Retain the cache-policy regression test and rerun Lighthouse in the release browser image if a fresh score is required.
+Expected sample summary: 1 mapping, 3 sources, 3 files, 7 occurrences, 0 unowned occurrences, and 1 external source.
+
+## Next steps
+
+Resolve every item F-01 through F-07 in `.factory/review-1.md`, add the required claim and demo documents, deploy the repaired artifact, and rerun a strict review. Factory owners must perform registry publication, billing registration, and deployment.
