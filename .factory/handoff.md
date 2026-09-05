@@ -1,5 +1,16 @@
 # Handoff: Identity Migration Map repair 2
 
+## Verification 4 update (2026-09-05)
+
+Independent verification of implementation `3d03af965a2cc7e45e4b9086430b5e79275250c1` is **FAIL**, recorded in `.factory/verification-4.md`. This is a report-only conclusion; no product code was changed.
+
+- The live artifact matches the fresh local build. All clean gates and all 14 exact claim commands passed. The public Git install, packaged CLI consumer run, phone and desktop demo, offline reload, routes, accessibility audit, headers, and $19 checkout passed.
+- The live hosted checkout returns 303 to Dodo, then 200 with Identity Migration Map Field Kit at $19.00. A live invalid token is correctly rejected and keeps paid content locked.
+- A real issued valid license was not available and no payment was authorized. The valid-entitlement part of `licensed-field-kit` is only tested with an intercepted response, so it remains an untested public assertion and blocks PASS.
+- README also says the factory publishes release packages despite no release/tag or crates.io package. The supported, tested installation route remains public Git.
+
+An authorized billing operator must complete one purchase and verify the returned valid token, daily cache, download, and revocation behavior. The README release-package wording must be removed/qualified or backed by a published and tested release. See `.factory/verification-4.md` for all evidence and the exact verdict.
+
 ## Outcome
 
 Repair 2 is implemented, pushed, deployed, and verified at <https://identity-migration-map.sociobot.in/>.
