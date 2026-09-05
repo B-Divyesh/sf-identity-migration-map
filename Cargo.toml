@@ -1,6 +1,6 @@
 [package]
 name = "identity-migration-map"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2024"
 rust-version = "1.85"
 description = "Read-only evidence mapper for identifier migrations"
@@ -9,6 +9,16 @@ repository = "https://github.com/B-Divyesh/sf-identity-migration-map"
 readme = "README.md"
 keywords = ["migration", "identity", "cli", "audit"]
 categories = ["command-line-utilities"]
+include = [
+    "/src/**",
+    "/tests/**",
+    "/examples/**",
+    "/Cargo.toml",
+    "/Cargo.lock",
+    "/README.md",
+    "/LICENSE",
+    "/CHANGELOG.md",
+]
 
 [[bin]]
 name = "imm"
@@ -25,4 +35,3 @@ walkdir = "2.5"
 [profile.release]
 strip = true
 lto = "thin"
-

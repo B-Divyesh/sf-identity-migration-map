@@ -5,6 +5,12 @@ use identity_migration_map::{
 use std::fs;
 use std::path::PathBuf;
 use std::process::ExitCode;
+use std::time::{SystemTime, UNIX_EPOCH};
+
+const DEMO_PLAN: &str = include_str!("../examples/sample/migration.toml");
+const DEMO_CONFIG: &str = include_str!("../examples/sample/config/app.env");
+const DEMO_USERS: &str = include_str!("../examples/sample/exports/users.csv");
+const DEMO_CHAT: &str = include_str!("../examples/sample/exports/chat.json");
 
 #[derive(Debug, Parser)]
 #[command(
@@ -20,6 +26,12 @@ struct Cli {
 
 #[derive(Debug, Subcommand)]
 enum Command {
+    /// Run the real scanner on bundled sample data in a new temporary directory
+    Demo {
+        /// Print the result and report location as JSON
+        #[arg(long)]
+        json: bool,
+    },
     /// Write a documented starter migration plan
     Init {
         /// Plan file to create
@@ -61,6 +73,7 @@ fn main() -> ExitCode {
 
 fn execute(cli: Cli) -> Result<ExitCode, MapError> {
     match cli.command {
+        Command::Demo { json } => run_demo(json),
         Command::Init { output, force } => {
             if output.exists() && !force {
                 return Err(MapError::InvalidPlan(format!(
@@ -104,4 +117,48 @@ fn execute(cli: Cli) -> Result<ExitCode, MapError> {
             }
         }
     }
+}
+
+fn run_demo(json: bool) -> Result<ExitCode, MapError> {
+    let nonce = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .unwrap_or_default()
+        .as_nanos();
+    let root = std::env::temp_dir().join(format!(
+        "identity-migration-map-demo-{}-{nonce}",
+        std::process::id()
+    ));
+    let sample = root.join("sample");
+    let output = root.join("migration-map");
+    fs::create_dir_all(sample.join("config"))?;
+    fs::create_dir_all(sample.join("exports"))?;
+    fs::write(sample.join("migration.toml"), DEMO_PLAN)?;
+    fs::write(sample.join("config/app.env"), DEMO_CONFIG)?;
+    fs::write(sample.join("exports/users.csv"), DEMO_USERS)?;
+    fs::write(sample.join("exports/chat.json"), DEMO_CHAT)?;
+
+    let plan = load_plan(&sample.join("migration.toml"))?;
+    let manifest = run_scan(&plan, &sample, ScanOptions::default())?;
+    write_outputs(&manifest, &output)?;
+
+    if json {
+        println!(
+            "{}",
+            serde_json::to_string(&serde_json::json!({
+                "demo": true,
+                "sample_data": "bundled",
+                "output_directory": output,
+                "summary": manifest.summary,
+            }))?
+        );
+    } else {
+        println!("Demo — bundled sample data; none of your files were read.");
+        println!(
+            "Mapped {} occurrence(s) across {} file(s).",
+            manifest.summary.occurrences, manifest.summary.files_scanned
+        );
+        println!("Reports: {}", output.display());
+        println!("Review required: external SaaS evidence needs human confirmation.");
+    }
+    Ok(ExitCode::SUCCESS)
 }

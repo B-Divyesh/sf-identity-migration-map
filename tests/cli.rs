@@ -145,3 +145,34 @@ fn committed_sample_finds_all_seven_declared_occurrences() {
     assert_eq!(summary["external_sources"], 1);
     let _ = fs::remove_dir_all(output_dir);
 }
+
+#[test]
+fn demo_uses_bundled_data_and_writes_a_complete_temporary_bundle() {
+    let output = Command::new(env!("CARGO_BIN_EXE_imm"))
+        .args(["demo", "--json"])
+        .output()
+        .unwrap();
+    assert!(
+        output.status.success(),
+        "{}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+    let result: serde_json::Value = serde_json::from_slice(&output.stdout).unwrap();
+    assert_eq!(result["demo"], true);
+    assert_eq!(result["sample_data"], "bundled");
+    assert_eq!(result["summary"]["occurrences"], 7);
+    assert_eq!(result["summary"]["files_scanned"], 3);
+    assert_eq!(result["summary"]["external_sources"], 1);
+    let output_dir = PathBuf::from(result["output_directory"].as_str().unwrap());
+    for name in [
+        "manifest.json",
+        "report.md",
+        "hits.csv",
+        "rollback-ledger.csv",
+    ] {
+        assert!(output_dir.join(name).is_file(), "missing {name}");
+    }
+    let demo_root = output_dir.parent().unwrap();
+    assert!(demo_root.starts_with(std::env::temp_dir()));
+    let _ = fs::remove_dir_all(demo_root);
+}
